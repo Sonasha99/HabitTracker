@@ -11,20 +11,23 @@ export default function LandingPage({ onLoginSuccess }) {
   const [showPrivacyModal, setShowPrivacyModal] = useState(false);
 
   const outerRef = useRef(null);
-  const imgRef = useRef(null);
+  const canvasRef = useRef(null);
   const targetFrameRef = useRef(START_FRAME);
   const currentFrameRef = useRef(START_FRAME);
+  const imagesMapRef = useRef(new Map());
 
   useEffect(() => {
-    // 1. Preload ALL 240 frames in background memory
-    const preloadedImages = [];
+    // 1. Preload image objects into memory map
+    const imagesMap = imagesMapRef.current;
     for (let i = START_FRAME; i <= TOTAL_FRAMES; i++) {
-      const img = new Image();
-      img.src = `/frames/ezgif-frame-${String(i).padStart(3, '0')}.jpg`;
-      preloadedImages.push(img);
+      if (!imagesMap.has(i)) {
+        const img = new Image();
+        img.src = `/frames/ezgif-frame-${String(i).padStart(3, '0')}.jpg`;
+        imagesMap.set(i, img);
+      }
     }
 
-    // 2. Calculate target frame on scroll
+    // 2. Scroll position calculation
     const onScroll = () => {
       const outer = outerRef.current;
       if (!outer) return;
@@ -40,19 +43,58 @@ export default function LandingPage({ onLoginSuccess }) {
     window.addEventListener('scroll', onScroll, { passive: true });
     onScroll();
 
-    // 3. Continuous 60fps smooth lerp render loop
-    let animId;
-    const updateFrame = () => {
-      // Smooth linear interpolation (lerp) toward target frame
-      currentFrameRef.current += (targetFrameRef.current - currentFrameRef.current) * 0.22;
-      const renderFrame = Math.max(START_FRAME, Math.min(TOTAL_FRAMES, Math.round(currentFrameRef.current)));
+    // 3. Canvas draw function with object-fit: cover aspect ratio math
+    const renderCanvas = (frameNum) => {
+      const canvas = canvasRef.current;
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      if (!ctx) return;
 
-      if (imgRef.current) {
-        const nextSrc = `/frames/ezgif-frame-${String(renderFrame).padStart(3, '0')}.jpg`;
-        if (imgRef.current.getAttribute('src') !== nextSrc) {
-          imgRef.current.src = nextSrc;
-        }
+      const img = imagesMap.get(frameNum);
+      if (!img || !img.complete || img.naturalWidth === 0) return;
+
+      const cw = canvas.width;
+      const ch = canvas.height;
+      const iw = img.naturalWidth;
+      const ih = img.naturalHeight;
+
+      const scale = Math.max(cw / iw, ch / ih);
+      const nw = iw * scale;
+      const nh = ih * scale;
+      const cx = (cw - nw) / 2;
+      const cy = (ch - nh) / 2;
+
+      ctx.clearRect(0, 0, cw, ch);
+      ctx.drawImage(img, cx, cy, nw, nh);
+    };
+
+    // 4. Handle resize
+    const handleResize = () => {
+      const canvas = canvasRef.current;
+      if (!canvas) return;
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      canvas.width = window.innerWidth * dpr;
+      canvas.height = window.innerHeight * dpr;
+      renderCanvas(Math.round(currentFrameRef.current));
+    };
+
+    window.addEventListener('resize', handleResize);
+    handleResize();
+
+    // 5. 60fps buttery smooth LERP animation loop
+    let animId;
+    let lastRenderedFrame = -1;
+
+    const updateFrame = () => {
+      // Smooth linear interpolation toward target frame
+      currentFrameRef.current += (targetFrameRef.current - currentFrameRef.current) * 0.18;
+      const frameToDraw = Math.max(START_FRAME, Math.min(TOTAL_FRAMES, Math.round(currentFrameRef.current)));
+
+      if (frameToDraw !== lastRenderedFrame) {
+        renderCanvas(frameToDraw);
+        lastRenderedFrame = frameToDraw;
       }
+
       animId = requestAnimationFrame(updateFrame);
     };
 
@@ -60,6 +102,7 @@ export default function LandingPage({ onLoginSuccess }) {
 
     return () => {
       window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('resize', handleResize);
       if (animId) cancelAnimationFrame(animId);
     };
   }, []);
@@ -120,11 +163,9 @@ export default function LandingPage({ onLoginSuccess }) {
 
       <div ref={outerRef} style={{ height: '400vh', position: 'relative' }}>
         <div style={{ position: 'sticky', top: 0, height: '100vh', overflow: 'hidden', backgroundColor: '#0A0A0A' }}>
-          <img
-            ref={imgRef}
-            src={`/frames/ezgif-frame-${String(START_FRAME).padStart(3, '0')}.jpg`}
-            alt="1% compound growth animation"
-            style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center center', display: 'block', zIndex: 0 }}
+          <canvas
+            ref={canvasRef}
+            style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', display: 'block', zIndex: 0 }}
           />
           <div style={{ position: 'absolute', bottom: 0, right: 0, width: '220px', height: '220px', background: 'radial-gradient(circle at bottom right, #0A0A0A 0%, #0A0A0A 65%, transparent 100%)', zIndex: 1, pointerEvents: 'none' }} />
           <div style={{ position: 'absolute', inset: 0, zIndex: 2, background: 'linear-gradient(to bottom, #0A0A0A 0%, rgba(10,10,10,0.6) 8%, transparent 25%, transparent 75%, rgba(10,10,10,0.7) 92%, #0A0A0A 100%)', pointerEvents: 'none' }} />
