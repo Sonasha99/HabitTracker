@@ -1,6 +1,5 @@
 # HabitTracker
-
-> **This website might look simple, but it has the power to make you an unstoppable beast. Start your monk mode Journey now.**
+**This website might look simple, but it has the power to make you an unstoppable beast. Start your monk mode Journey now.**
 
 ## Differentiator
 
