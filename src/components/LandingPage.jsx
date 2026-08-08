@@ -12,42 +12,55 @@ export default function LandingPage({ onLoginSuccess }) {
 
   const outerRef = useRef(null);
   const imgRef = useRef(null);
-  const rafRef = useRef(null);
+  const targetFrameRef = useRef(START_FRAME);
+  const currentFrameRef = useRef(START_FRAME);
 
   useEffect(() => {
+    // 1. Preload ALL 240 frames in background memory
+    const preloadedImages = [];
+    for (let i = START_FRAME; i <= TOTAL_FRAMES; i++) {
+      const img = new Image();
+      img.src = `/frames/ezgif-frame-${String(i).padStart(3, '0')}.jpg`;
+      preloadedImages.push(img);
+    }
+
+    // 2. Calculate target frame on scroll
     const onScroll = () => {
-      if (rafRef.current) cancelAnimationFrame(rafRef.current);
-      rafRef.current = requestAnimationFrame(() => {
-        const outer = outerRef.current;
-        if (!outer) return;
+      const outer = outerRef.current;
+      if (!outer) return;
 
-        const rect = outer.getBoundingClientRect();
-        const scrollable = rect.height - window.innerHeight;
-        const scrolled = -rect.top;
-        const progress = scrollable > 0 ? Math.max(0, Math.min(1, scrolled / scrollable)) : 0;
+      const rect = outer.getBoundingClientRect();
+      const scrollable = rect.height - window.innerHeight;
+      const scrolled = -rect.top;
+      const progress = scrollable > 0 ? Math.max(0, Math.min(1, scrolled / scrollable)) : 0;
 
-        const frame = Math.max(START_FRAME, Math.min(TOTAL_FRAMES, Math.round(START_FRAME + progress * (TOTAL_FRAMES - START_FRAME))));
-        if (imgRef.current) {
-          const next = `/frames/ezgif-frame-${String(frame).padStart(3, '0')}.jpg`;
-          if (imgRef.current.getAttribute('src') !== next) imgRef.current.src = next;
-        }
-      });
+      targetFrameRef.current = START_FRAME + progress * (TOTAL_FRAMES - START_FRAME);
     };
 
     window.addEventListener('scroll', onScroll, { passive: true });
     onScroll();
 
-    const t = setTimeout(() => {
-      for (let i = START_FRAME; i <= Math.min(TOTAL_FRAMES, START_FRAME + 60); i++) {
-        const img = new Image();
-        img.src = `/frames/ezgif-frame-${String(i).padStart(3, '0')}.jpg`;
+    // 3. Continuous 60fps smooth lerp render loop
+    let animId;
+    const updateFrame = () => {
+      // Smooth linear interpolation (lerp) toward target frame
+      currentFrameRef.current += (targetFrameRef.current - currentFrameRef.current) * 0.22;
+      const renderFrame = Math.max(START_FRAME, Math.min(TOTAL_FRAMES, Math.round(currentFrameRef.current)));
+
+      if (imgRef.current) {
+        const nextSrc = `/frames/ezgif-frame-${String(renderFrame).padStart(3, '0')}.jpg`;
+        if (imgRef.current.getAttribute('src') !== nextSrc) {
+          imgRef.current.src = nextSrc;
+        }
       }
-    }, 300);
+      animId = requestAnimationFrame(updateFrame);
+    };
+
+    animId = requestAnimationFrame(updateFrame);
 
     return () => {
       window.removeEventListener('scroll', onScroll);
-      if (rafRef.current) cancelAnimationFrame(rafRef.current);
-      clearTimeout(t);
+      if (animId) cancelAnimationFrame(animId);
     };
   }, []);
 
@@ -66,8 +79,8 @@ export default function LandingPage({ onLoginSuccess }) {
   return (
     <div style={{ fontFamily: 'Inter, sans-serif', backgroundColor: '#0A0A0A', color: '#D4D4D4' }}>
       <style>{`
-        .text-link { color: #737373; text-decoration: none; cursor: pointer; background: none; border: none; padding: 0; font-family: Inter, sans-serif; font-size: 13px; }
-        .text-link:hover { color: #D4D4D4; }
+        .text-link { color: #737373; text-decoration: none; cursor: pointer; background: none; border: none; padding: 0; font-family: Inter, sans-serif; font-size: 13px; transition: color 0.15s; }
+        .text-link:hover { color: #FFFFFF; }
         @media (max-width: 640px) {
           .footer-inner { flex-direction: column !important; gap: 24px !important; }
         }
@@ -80,13 +93,13 @@ export default function LandingPage({ onLoginSuccess }) {
           <div style={{ display: 'flex', gap: '24px', alignItems: 'center' }}>
             <div style={{ display: 'flex', gap: '20px', alignItems: 'center' }}>
               <a href="mailto:connectsonasha@gmail.com" className="text-link" style={{ fontSize: '13px' }}>Contact Us</a>
-              <button type="button" className="text-link" onClick={() => setShowTermsModal(true)} style={{ fontSize: '13px' }}>Terms</button>
-              <button type="button" className="text-link" onClick={() => setShowPrivacyModal(true)} style={{ fontSize: '13px' }}>Privacy</button>
+              <button type="button" className="text-link" onClick={() => setShowTermsModal(true)} style={{ fontSize: '13px' }}>Terms and Conditions</button>
+              <button type="button" className="text-link" onClick={() => setShowPrivacyModal(true)} style={{ fontSize: '13px' }}>Privacy Policy</button>
             </div>
             
             <button type="button" onClick={() => setShowAuthModal(true)}
-              style={{ backgroundColor: '#FFFFFF', color: '#0A0A0A', border: 'none', borderRadius: '8px', padding: '8px 22px', fontSize: '13px', fontWeight: 700, cursor: 'pointer', fontFamily: 'Inter, sans-serif' }}>
-              Sign In
+              style={{ backgroundColor: '#FFFFFF', color: '#0A0A0A', border: 'none', borderRadius: '8px', padding: '8px 20px', fontSize: '13px', fontWeight: 700, cursor: 'pointer', fontFamily: 'Inter, sans-serif' }}>
+              Create Account / Sign In
             </button>
           </div>
         </div>
@@ -124,8 +137,6 @@ export default function LandingPage({ onLoginSuccess }) {
           <span style={{ fontSize: '12px', fontWeight: 500, color: '#444444' }}>Product by Sonasha</span>
         </div>
       </footer>
-
-
 
       {showTermsModal && (
         <div onClick={e => e.target === e.currentTarget && setShowTermsModal(false)}
