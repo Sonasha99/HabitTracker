@@ -2,10 +2,11 @@
 **This readme file and idea might look simple to u, but the website has the power to make you an unstoppable beast. Start your monk mode journey from now.**
 
 ## Differentiator
--A very aesthetic dark-monochrome habit tracker without any cringe emojis. 
--Track the habits you choose, monitor your sleep.
--Get a new motivation quote every day.
--See your progress through day-, week-, and month-wise analytics.
+
+- A very aesthetic dark-monochrome habit tracker without any cringe emojis.
+- Track the habits you choose and monitor your sleep.
+- Get a new motivational quote every day.
+- See your progress through day-, week-, and month-wise analytics.
 
 ## Tech Stack
 
@@ -35,9 +36,11 @@ npm run dev
 
 Open `http://localhost:5173`.
 
-## Deployed  
-on Vercel
-* Add `DATABASE_URL`, `JWT_SECRET`, and `VITE_API_URL` to the respective environment variables.
+## Deployment
+
+Deployed on Vercel.
+
+- Add `DATABASE_URL`, `JWT_SECRET`, and `VITE_API_URL` to the environment variables.
 
 ---
 
