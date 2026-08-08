@@ -85,12 +85,6 @@ export default function LoginView({ onLoginSuccess }) {
         </form>
       </div>
 
-      <div style={{ marginTop: '40px', textAlign: 'center', display: 'flex', flexDirection: 'column', gap: '8px' }}>
-        <p style={{ fontSize: '12px', color: '#525252' }}>
-          Contact: <a href="mailto:connectsonasha@gmail.com" style={{ color: '#A3A3A3', textDecoration: 'none' }}>connectsonasha@gmail.com</a>
-        </p>
-        <p style={{ fontSize: '11px', color: '#404040' }}>Product by Sonasha</p>
-      </div>
     </div>
   );
 }
