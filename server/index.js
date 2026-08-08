@@ -349,3 +349,5 @@ app.listen(PORT, '0.0.0.0', () => {
   console.log(`Habit Tracker Backend running on http://localhost:${PORT}`);
   console.log(`Database: ${isUsingNeon ? 'Neon PostgreSQL' : 'Local Fallback (add DATABASE_URL to .env)'}`);
 });
+
+export default app;
