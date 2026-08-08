@@ -1,79 +1,48 @@
-# HabitTracker 🚀
+# HabitTracker
 
-> **Be 1% better every day.**  
-> A high-performance, dark monochrome habit tracking application with scroll-driven animations, monthly grid views, target scoring, sleep cycle monitoring, and deep analytics.
+> **This website might look simple, but it has the power to make you an unstoppable beast. Start your monk mode Journey now.**
 
----
+## Differentiator
 
-## 🌟 Features
+A very aesthetic dark-monochrome habit tracker without any cringe emojis, no unnecessary clutter. Track the habits you choose, monitor your sleep, get a new motivation quote every day, and see your progress through day-, week-, and month-wise analytics.
 
-- **Scroll-Driven Frame Animation**: Smooth hero scroll animation controlled directly by user scroll position.
-- **Monthly Habit Grid**: Clean grid view to log daily habits with 1-click checkmarks.
-- **Target-Based Scoring**: Dynamic scoring calculated from completed targets vs. planned habits.
-- **Sleep Cycle Tracking**: Log daily sleep hours and track monthly sleep consistency trends.
-- **Deep Analytics & Streaks**: Active streak protection, weekday pattern analysis, and progress graphs.
-- **Cloud Database Integration**: Powered by Neon PostgreSQL with automatic local JSON fallback for offline development.
+## Tech Stack
 
----
+- **Frontend:** React 19, Vite, Recharts, Lucide Icons, Vanilla CSS
+- **Backend:** Node.js, Express.js, JWT, bcryptjs
+- **Database:** Neon PostgreSQL, Drizzle ORM
 
-## 🛠️ Tech Stack
+## Environment Variables
 
-- **Frontend**: React 19, Vite, Lucide Icons, Recharts, Vanilla CSS (Dark Monochrome Theme)
-- **Backend**: Node.js, Express, JWT Authentication, bcryptjs
-- **Database**: Neon PostgreSQL, Drizzle ORM
-
----
-
-## ⚙️ Environment Variables Setup
-
-Create a `.env` file in the root directory with the following variables:
+Create a `.env` file in the root directory:
 
 ```env
-# Neon PostgreSQL Database Connection URL (from https://console.neon.tech)
 DATABASE_URL=postgresql://neondb_owner:YOUR_PASSWORD@ep-xxx.neon.tech/neondb?sslmode=require
-
-# Backend Express Server Port
 PORT=3001
-
-# Frontend API URL
 VITE_API_URL=http://localhost:3001/api
+JWT_SECRET=your_jwt_secret
+````
+
+## Quick Start
+
+```bash
+npm install
+npm run db:push
+npm run server
+npm run dev
 ```
 
----
+Open `http://localhost:5173`.
 
-## 🚀 Quick Start (Local Development)
+## Deployment
 
-1. **Install Dependencies**:
-   ```bash
-   npm install
-   ```
-
-2. **Push Database Schema (Neon PostgreSQL)**:
-   ```bash
-   npm run db:push
-   ```
-
-3. **Start Backend Server**:
-   ```bash
-   npm run server
-   ```
-
-4. **Start Frontend Dev Server**:
-   ```bash
-   npm run dev
-   ```
-
-5. Open your browser at `http://localhost:5173`.
+* **Backend:** Render / Railway
+* **Frontend:** Vercel / Netlify
+* Add `DATABASE_URL`, `JWT_SECRET`, and `VITE_API_URL` to the respective environment variables.
 
 ---
 
-## 🌐 Production Deployment
+**Product by Sonasha**
 
-- **Backend (Render / Railway)**: Deploy `server/index.js` with `DATABASE_URL` and `JWT_SECRET` environment variables.
-- **Frontend (Vercel / Netlify)**: Deploy Vite build with `VITE_API_URL` pointing to your deployed backend API URL.
-
----
-
-## 📝 License & Product Info
-
-Product built by **Sonasha**. All rights reserved.
+```
+```
