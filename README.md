@@ -42,6 +42,3 @@ Open `http://localhost:5173`.
 ---
 
 **Product by Sonasha**
-
-```
-```
