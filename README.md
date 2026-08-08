@@ -33,10 +33,8 @@ npm run dev
 
 Open `http://localhost:5173`.
 
-## Deployment
-
-* **Backend:** Render / Railway
-* **Frontend:** Vercel / Netlify
+## Deployed  
+on Vercel
 * Add `DATABASE_URL`, `JWT_SECRET`, and `VITE_API_URL` to the respective environment variables.
 
 ---
