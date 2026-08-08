@@ -1,9 +1,11 @@
 # HabitTracker
-**This website might look simple, but it has the power to make you an unstoppable beast. Start your monk mode Journey now.**
+**This readme file and idea might look simple to u, but the website has the power to make you an unstoppable beast. Start your monk mode journey from now.**
 
 ## Differentiator
-
-A very aesthetic dark-monochrome habit tracker without any cringe emojis, no unnecessary clutter. Track the habits you choose, monitor your sleep, get a new motivation quote every day, and see your progress through day-, week-, and month-wise analytics.
+-A very aesthetic dark-monochrome habit tracker without any cringe emojis. 
+-Track the habits you choose, monitor your sleep.
+-Get a new motivation quote every day.
+-See your progress through day-, week-, and month-wise analytics.
 
 ## Tech Stack
 
