@@ -135,9 +135,9 @@ export default function LandingPage({ onLoginSuccess }) {
           
           <div style={{ display: 'flex', gap: '24px', alignItems: 'center' }}>
             <div style={{ display: 'flex', gap: '20px', alignItems: 'center' }}>
-              <a href="mailto:connectsonasha@gmail.com" className="text-link" style={{ fontSize: '13px' }}>Contact Us</a>
-              <button type="button" className="text-link" onClick={() => setShowTermsModal(true)} style={{ fontSize: '13px' }}>Terms and Conditions</button>
-              <button type="button" className="text-link" onClick={() => setShowPrivacyModal(true)} style={{ fontSize: '13px' }}>Privacy Policy</button>
+              <a href="mailto:connectsonasha@gmail.com" className="text-link" style={{ fontSize: '13px' }}>Contact</a>
+              <button type="button" className="text-link" onClick={() => setShowTermsModal(true)} style={{ fontSize: '13px' }}>Terms</button>
+              <button type="button" className="text-link" onClick={() => setShowPrivacyModal(true)} style={{ fontSize: '13px' }}>Privacy</button>
             </div>
             
             <button type="button" onClick={() => setShowAuthModal(true)}
