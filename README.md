@@ -6,7 +6,7 @@
 - A very aesthetic dark-monochrome habit tracker without any cringe emojis.
 - Track the habits you choose and monitor your sleep.
 - Get a new motivational quote every day.
-- See your progress through day-, week-, and month-wise analytics.
+- See your progress through day, week, and month-wise analytics.
 
 ## Tech Stack
 
